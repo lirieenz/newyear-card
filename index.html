@@ -1,30 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy New Year 💖</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="bday.png" />
+  <title>happy new year friendz kuh</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #f0f0ff; color: #6a5acd; font-family: 'Poppins', sans-serif; overflow: auto; }
+    .page { min-height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 1s ease; }
+    .page.active { opacity: 1; pointer-events: auto; }
+    h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+    h2 { font-size: 1.8rem; margin-bottom: 1rem; }
+    .highlight { color: #8a2be2; font-weight: bold; }
+    .button { background-color: #9370db; color: #fff; border: none; border-radius: 25px; padding: 15px 30px; font-size: 1.2rem; cursor: pointer; margin-top: 30px; transition: background 0.3s; }
+    .button:hover { background-color: #8a2be2; }
+    img { max-width: 70vw; max-height: 50vh; margin-bottom: 20px; }
+    .letter { white-space: pre-line; font-size: 1.1rem; max-width: 600px; text-align: left; border-left: 3px solid #9370db; padding-left: 15px; min-height: 200px; }
+    .falling { position: fixed; top: -30px; font-size: 24px; animation: fall linear infinite; pointer-events: none; z-index: 9999; }
+    .pink-heart { color: #9370db; }
+    .yellow-star { color: #dda0dd; }
+    .music-control { position: fixed; bottom: 20px; right: 20px; font-size: 30px; cursor: pointer; z-index: 9999; }
+    @keyframes fall { to { transform: translateY(120vh) rotate(360deg); opacity: 0; } }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.5rem; }
+      .button { padding: 10px 20px; font-size: 1rem; }
+      .letter { font-size: 1rem; }
+    }
+  </style>
 </head>
 <body>
+  <div class="page active" id="page1">
+    <img src="first.jpg" alt="Cute Icon" />
+    <h1><span class="highlight">pag nadawat nimo ni</span></h1>
+    <p>certified bayot ka</p>
+    <button class="button" onclick="goToPage(2)">pinduta oy</button>
+  </div>
 
-<div class="card">
-    <h1 id="title">Happy New Year 💖</h1>
+  <div class="page" id="page2">
+    <img src="second.jpg" alt="Envelope" />
+    <p>ingna kusog "open sesame" ( ∩´͈ ᐜ `͈∩)</p>
+    <button class="button" onclick="goToPage(3)">ablihi</button>
+  </div>
 
-    <div class="envelope-container">
-        <div class="envelope">
-            <div class="envelope-flap"></div>
+  <div class="page" id="page3" style="font-family: 'Dancing Script', cursive;">
+    <h2>hape no yer <3</h2>
+    <div class="letter" id="letterText"></div>
+  </div>
 
-            <div class="letter" id="letter">
-                <p id="recipient"></p>
-                <p id="message"></p>
-            </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
 
-            <div class="heart-btn" id="openBtn"></div>
-        </div>
-    </div>
-</div>
+    const letters = {
+      frances: `happy new year, my soul sister :)),, to more years of growing side by side, even when life pulls us in different directions boogsh english aray mo,,, thankz yu for being my safe space ... for listening even when dile ko kabalo unsa iingon and for loving me without needing me to be okay all the time. you’ve seen me in my quiet timez and my messy onez yet you stayed and aaaa boom boom marcos i don’t say this enough pero i love you deeply and always ko thankful nga our paths crossed 3 years ago :DD`,
+      gian: `happy new year gian !! unta this year you'd learn how to slow down a bit ug dile ipush imo sarili too hard sa bisag unsa na situation ANDD DILE TANAN SITUATION KINAHANGLAN UG KUSI [sa imo gid nako na natun-an mangusi bruh yotba] boogsh and bayot ang mangunfriend after grad or if layo na ta.,,, life changes, people grow, but i believe nga some connections are meant to stay, even from afar ug unta apil ka sa mga magpabilin. thank you yan :))`,
+      carl: `happy new year bayot,,,, i pray nga this year brings you courage especially sa imo mga decisions sa life and in love and unta you'd learn to choose what’s right,, dile lang sa kung unsa ang easy or familiar cuz you deserve peace, stability, and a situation nga dile nimo maquestion imo worth orr security. i hope 2026 will help you become more intentional with your heart and imo future :')`,
+      kylie: `happy new year ky !!! i pray for blessings over you and your family diz year and unta you'd continue to grow stronger, more confident, and more secure sa kung kinsa ka. learn to trust yourself and your abilities na dili nimo need mag-depend sa opinions sa uban to feel validated cuz you are more capable than you think, and you don’t need permission to stand on your own :DD i hope this year you'd choose yourself more... lav yew`,
+      jelianne: `happy new year jel ... i know life hasn’t always been kind and easy sa imo but i hope this year you find strength even sa pinaka pinaka pinakalisod nga moments and just know nga naa ko always ha. you never have to go through anything alone,, bisag unsa pa na, you have someone you can run to and talk to anytime and ako to. gatuo ko sa imo and i hope you never forget how strong you actually are even dili na ka kabalo unsa ang himuon.`,
+      lyka: `happy new year lyka mae... i hope this year you'd grow stronger and happier by truly knowing yourself more ug learn to set boundaries without guilt kay usahay pareha gid ta nga ginaisip ang iba before ato kaugalingon and this year unta you'd learn how to build walls not to shut people out but to protect your peace and your heart kay not everyone deserves access sa imo and that’s okay. i hope you learn to choose your people wisely and choose yourself more often kay you deserve a life that feels safe and a place where you don't have to be constantly worried and unsure.`,
+      chester: `happy new year koy ! even though bago lang taka nakilala nagclick dayon ta and im really thankful nga naa koy naging friend in diz section cuz you made things feel less unfamiliar.... just know nga naa ra ko always if you need someone kay you don't have to carry those things alone and i hope this year, you'd grow more mature, strong, and independent.... someone nga magstand firm and dili dali madala by what’s happening sa imo palibot. and sorry pud for d times i may have hurt you or made mistakes. have a blessed year ahead :DDD`,
+      trixie: `happy new year targzi nako :')) i hope this year brings you growth that feels subtle and that malearn nimo how to trust yourself more and to give yourself a hug even if dile mahitabo ang tanan sa plano or sa imo gigusto... life doesn’t always make sense man but i hope 2026 gives us moments nga magremind sa imo why you started and who you’re becoming nd i’m always rooting for you quietly and bisag maglayo na man ta [possibly] always lang isipa nga naa kay ako nga one call away nimo. lav yew mommy strong woman trixie vereanne lagang rollon`,
+      nath: `happy new year nath [NJ ALL THE WAY],, even if layo man ka, you’re someone i still think about often... lahi ra gid diay if layo and i miss you more than i say and i hope 2026 brings us closer in ways we don’t expect,, dile lang physical kay medyo buslot pa atong pitaka rong panahona..,, wherever you are, i hope life is treating you and your family gently. just know nga naa ra ko diri, always wishing you well and imo one call away sa bisag unsa man na situation. lav yew miss u ;))`,
+      lizha: `happy new year bayot fr,,, diz year was zo buang for us ganyan talaga basta cool but happy ko sa imo cuz even without airyn, naggrow ka and something new developed sa imo and zometimes endings iz sakit but meaning ana iz life's making space for something becoming and ayaw na pagbalik sa iyaha oy.... yes`
+    };
 
-<script src="script.js"></script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+    const recipientKey = getQueryParam('to');
+    const fullLetter = letters[recipientKey] || "hapi no yer";
+
+    function playClickSound() {
+      const clickSound = document.getElementById('click-sound');
+      clickSound.currentTime = 0;
+      clickSound.play().catch(e => console.log("Audio play failed:", e));
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const clickableElements = document.querySelectorAll('button, .music-control');
+      clickableElements.forEach(element => { element.addEventListener('click', playClickSound); });
+    });
+
+    function goToPage(pageNum) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(p => p.classList.remove('active'));
+      const next = document.getElementById(`page${pageNum}`);
+      next.classList.add('active');
+
+      if (pageNum === 3) {
+        const music = document.getElementById("bg-music");
+        music.muted = false;
+        music.play().catch(e => console.log("Autoplay blocked:", e));
+        document.getElementById("musicControl").textContent = "🔊";
+
+        confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        typeText(fullLetter, document.getElementById('letterText'), 25);
+        startFallingSymbols();
+      }
+    }
+
+    function typeText(text, element, speed) {
+      element.innerHTML = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    function startFallingSymbols() {
+      setInterval(() => {
+        const el = document.createElement('div');
+        el.classList.add('falling');
+        const isHeart = Math.random() < 0.5;
+        el.innerText = isHeart ? '💕' : '⭐';
+        el.classList.add(isHeart ? 'pink-heart' : 'yellow-star');
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (3 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 6000);
+      }, 300);
+    };
+  </script>
 </body>
 </html>
